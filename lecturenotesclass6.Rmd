@@ -1,7 +1,7 @@
 ---
 title: "Spatial Data and Visualization"
 author: "Your Name"
-date: "2-11-2020"
+date: "9-15-2021"
 output:
   html_document:
     df_print: paged
@@ -51,7 +51,7 @@ mpg
 A new simple feature object.
 
 ```{r sf-data}
-nc <- st_read("~/R/nc_covid.shp", quiet = TRUE)
+nc <- st_read("~/nc_covid.shp", quiet = TRUE)
 nc
 ```
 
@@ -79,7 +79,7 @@ All functions in the `sf` package helpfully begin `st_`.
 To read simple features from a file or database use the function `st_read()`.
 
 ```{r demo-read-in-data}
-nc <- st_read("~/R/nc_covid.shp", quiet = TRUE)
+nc <- st_read("~/nc_covid.shp", quiet = TRUE)
 nc
 ```
 
@@ -238,11 +238,15 @@ nc %>%
 
 ## Practice
 
-(1) Construct an effective visualization investigating the spatial distribution
-of COVID-19 deaths in North Carolina. Carefully consider aesthetics and choose 
+(1) Construct an effective visualization investigating the spatial distribution of COVID-19 deaths in North Carolina. Carefully consider aesthetics and choose 
 your own color palette using colorbrewer2.
 
 ```{r practice-1}
+ggplot(nc) +
+  geom_sf(aes(fill = death100)) +
+  scale_fill_gradient(low = "#fee8c8", high = "#e34a33") +
+  labs(title = "NC Covid-19 Deaths per 100,000 People",
+       fill = "Deaths per 100k")
 ```
 
 (2) Which counties have more deaths than expected given their case count? 
@@ -251,10 +255,18 @@ an effective visualization to answer this question and carefully consider all
 aesthetic choices.
 
 ```{r practice-2}
-
+nc2 <- nc %>%
+  mutate(deaths_per_100case = 100 * deaths/cases)
+ggplot(nc2) +
+  geom_sf(aes(fill = deaths_per_100case)) +
+  scale_fill_gradient(low = "#fee8c8", high = "#e34a33") +
+  labs(title = "NC Covid-19 Deaths per 100 Cases",
+       fill = "Deaths per 100 Cases")
 ```
 
 (3) What are limitations of your visualizations above?
+
+A variety of potential answers here.
 
 ### Additional Resources
 
